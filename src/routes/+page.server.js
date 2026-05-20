@@ -24,3 +24,24 @@ export async function load() {
 
   return { transactions: rows };
 }
+export const actions = {
+  default: async ({ request }) => {
+
+    const formData = await request.formData();
+
+    const date        = formData.get('date');
+    const description = formData.get('description');
+    const debit       = formData.get('debit');
+    const credit      = formData.get('credit');
+    const amount      = formData.get('amount');
+
+    await sql`
+      INSERT INTO transactions
+        (date, description, debit, credit, amount)
+      VALUES
+        (${date}, ${description}, ${debit}, ${credit}, ${amount})
+    `;
+
+    return { success: true };
+  }
+};
