@@ -35,6 +35,19 @@
       return 'Other';
     }
   }
+  let totalRevenue = $derived(
+  transactions
+    .filter(t => classify(t) === 'Revenue')
+    .reduce((sum, t) => sum + t.amount, 0)
+);
+
+let totalExpenses = $derived(
+  transactions
+    .filter(t => classify(t) === 'Expense')
+    .reduce((sum, t) => sum + t.amount, 0)
+);
+
+let netIncome = $derived(totalRevenue - totalExpenses);
 </script>
 
 <div class="max-w-5xl mx-auto p-6 space-y-8">
@@ -161,24 +174,22 @@
       Income Statement
     </h2>
 
-    <div class="space-y-2">
-
-      <div class="flex justify-between text-emerald-700 font-medium">
-        <span>Total Revenue</span>
-        <span>$0.00</span>
-      </div>
-
-      <div class="flex justify-between text-rose-700 font-medium">
-        <span>Total Expenses</span>
-        <span>$0.00</span>
-      </div>
-
-      <div class="flex justify-between border-t border-slate-300 pt-2 text-lg font-bold">
-        <span>Net Income</span>
-        <span>$0.00</span>
-      </div>
-
-    </div>
+<div class="space-y-2">
+  <div class="flex justify-between text-emerald-700 font-medium">
+    <span>Total Revenue</span>
+    <span>${totalRevenue.toFixed(2)}</span>
+  </div>
+  <div class="flex justify-between text-rose-700 font-medium">
+    <span>Total Expenses</span>
+    <span>${totalExpenses.toFixed(2)}</span>
+  </div>
+  <div class="flex justify-between border-t border-slate-300 pt-2 text-lg font-bold">
+    <span>Net Income</span>
+    <span class={netIncome >= 0 ? 'text-emerald-700' : 'text-rose-700'}>
+      ${netIncome.toFixed(2)}
+    </span>
+  </div>
+</div>
   </section>
 
   <!-- TRANSACTIONS LIST -->
